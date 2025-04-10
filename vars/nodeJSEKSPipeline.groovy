@@ -72,7 +72,7 @@ def call(Map configMap){
         stage('Deploy'){
             steps{
                 steps{
-                build job: 'backend-cd', parameters: [
+                build job: "../${component}-cd", parameters: [
                     string(name: 'version', value: "$appVersion"),
                     string(name: 'ENVIRONMENT', value: "dev"),
                     ], wait: true
