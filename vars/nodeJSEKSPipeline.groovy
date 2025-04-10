@@ -6,8 +6,10 @@ def call(Map configMap){
     options{
         timeout(time: 30, unit: 'MINUTES')
     }
+    parameters{
+        booleanParam(name: 'deploy', defaultValue: false, description: 'select to deploy or not')
+    }
     environment {
-        DEBUG = 'true'
         appVersion = '' // This will become global, we can use env accross stages
         region = 'us-east-1'
         account_id = '361769572747'
@@ -48,21 +50,14 @@ def call(Map configMap){
             }
         }
         stage('Docker build') {
-            
-            steps {
-                withAWS(region: 'us-east-1', credentials: 'aws-creds-terraform'){
-                
-                sh """
-                aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${account_id}.dkr.ecr.us-east-1.amazonaws.com
-
-                docker build -t ${account_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${component}:${appVersion} .
-
-                 docker images
-
-                docker push ${account_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${component}:${appVersion}
-               
-                """
+            when{
+                expression {params.deploy}
             }
+            steps{
+                build job: 'backend-cd', parameters: [
+                    string(name: 'version', value: "$appVersion"),
+                    string(name: 'ENVIRONMENT', value: "dev"),
+                    ], wait: true
             }
         }
         stage('Deploy'){
