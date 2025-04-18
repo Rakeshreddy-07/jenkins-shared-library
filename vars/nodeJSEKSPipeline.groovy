@@ -70,6 +70,9 @@ def call(Map configMap){
             }
         }
         stage('Deploy'){
+             when{
+             expression {params.deploy}
+            }
                 steps{
                 build job: "../${component}-cd", parameters: [
                     string(name: 'version', value: "$appVersion"),
