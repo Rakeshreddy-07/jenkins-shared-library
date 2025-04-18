@@ -85,7 +85,7 @@ def call(Map configMap){
         post {
             always {
                 echo "this section runs always"
-                deleteDir()
+                //deleteDir()
             }
             success{
                 echo "this section runs when pipeline success"
