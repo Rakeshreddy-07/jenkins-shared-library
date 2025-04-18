@@ -50,9 +50,9 @@ def call(Map configMap){
             }
         }
         stage('Docker build') {
-            when{
-                expression {params.deploy}
-            }
+            // when{
+            //     expression {params.deploy}
+            // }
             steps {
                 withAWS(region: 'us-east-1', credentials: 'aws-creds-terraform'){
                 
