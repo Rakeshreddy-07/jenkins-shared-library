@@ -74,7 +74,7 @@ def call(Map configMap){
              expression {params.deploy}
             }
                 steps{
-                build job: "../${component}-cd", parameters: [
+                build job: "../../${component}-cd", parameters: [
                     string(name: 'version', value: "$appVersion"),
                     string(name: 'ENVIRONMENT', value: "dev"),
                     ], wait: true
